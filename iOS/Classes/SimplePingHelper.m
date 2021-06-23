@@ -16,35 +16,35 @@
 + (void)ping:(NSString*)address withTarget:(id)target withSel:(SEL)sel withTimeout:(int) timeout
 {
 	// The helper retains itself through the timeout function
-	[[[[SimplePingHelper alloc] initWithAddress:address withTarget:target withSel:sel withTimeout:timeout] autorelease] start];
+	[[[SimplePingHelper alloc] initWithAddress:address withTarget:target withSel:sel withTimeout:timeout] start];
 }
 
 #pragma mark - Init/dealloc
 
 - (void)dealloc
 {
-    if(_simplePing!=nil){
-        RELEASE_TO_NIL(_simplePing);
-    }
-    if(_target!=nil){
-        RELEASE_TO_NIL(_target);
-    }
-    if(_address!=nil){
-        RELEASE_TO_NIL(_address);
-    }
-    if(_startDate!=nil){
-        RELEASE_TO_NIL(_startDate);
-    }
-	[super dealloc];
+//    if(_simplePing!=nil){
+//        RELEASE_TO_NIL(_simplePing);
+//    }
+//    if(_target!=nil){
+//        RELEASE_TO_NIL(_target);
+//    }
+//    if(_address!=nil){
+//        RELEASE_TO_NIL(_address);
+//    }
+//    if(_startDate!=nil){
+//        RELEASE_TO_NIL(_startDate);
+//    }
+//	[super dealloc];
 }
 
 - (id)initWithAddress:(NSString*)address withTarget:(id)target withSel:(SEL)sel withTimeout:(int) timeout
 {
 	if (self = [self init]) {
-        _address = [address retain];
-		_simplePing = [[SimplePing simplePingWithHostName:[NSMutableString stringWithString: address]] retain];
+        _address = address;//[address retain];
+		_simplePing = [SimplePing simplePingWithHostName:[NSMutableString stringWithString: address]];
 		_simplePing.delegate = self;
-		_target = [target retain];
+        _target = target;//[target retain];
 		_sel = sel;
         _timeOut = timeout;
 	}
@@ -56,9 +56,9 @@
 - (void)start
 {
     if(_startDate!=nil){
-        RELEASE_TO_NIL(_startDate);
+        //RELEASE_TO_NIL(_startDate);
     }
-    _startDate = [[NSDate date] retain];
+    _startDate = [NSDate date];
 	[_simplePing start];
 	[self performSelector:@selector(endTime) withObject:nil afterDelay:1]; // This timeout is what retains the ping helper
 }
@@ -69,7 +69,7 @@
 - (void)stop
 {
 	[_simplePing stop];
-	[[_simplePing retain] autorelease]; // In case, higher up the call stack, this got called by the simpleping object itself
+	//[[_simplePing retain] autorelease]; // In case, higher up the call stack, this got called by the simpleping object itself
 	_simplePing = nil;
 }
 

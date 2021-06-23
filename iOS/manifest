@@ -2,17 +2,17 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 0.1
+version: 1.0.0
 apiversion: 2
-description: Pinger
-author: Benjamin Bahrenburg
-license: Apache 2.0 See license file for details
-copyright: Copyright (c) 2013 by Benjamin Bahrenburg
-
+architectures: armv7 arm64 i386 x86_64
+description: BencodingPinger
+author: Amar Domkawle
+license: Specify your license
+copyright: Copyright (c) 2021 by Your Company
 
 # these should not be edited
-name: Pinger
+name: BencodingPinger
 moduleid: bencoding.pinger
-guid: 6eb0b65c-49d9-461a-b4f6-3ba0928068f1
+guid: 075c5591-18e8-45e9-946d-5cc5d7631d3f
 platform: iphone
-minsdk: 3.1.0.GA
+minsdk: 9.0.3.GA

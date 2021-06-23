@@ -135,22 +135,22 @@ static uint16_t in_cksum(const void *buffer, size_t bufferLen)
     assert(self->_host == NULL);
     assert(self->_socket == NULL);
     
-    [self->_hostName release];
-    [self->_hostAddress release];
-
-    [super dealloc];
+//    [self->_hostName release];
+//    [self->_hostAddress release];
+//
+//    [super dealloc];
 }
 
 + (SimplePing *)simplePingWithHostName:(NSString *)hostName
     // See comment in header.
 {
-    return [[[SimplePing alloc] initWithHostName:hostName address:nil] autorelease];
+    return [[SimplePing alloc] initWithHostName:hostName address:nil];
 }
 
 + (SimplePing *)simplePingWithHostAddress:(NSData *)hostAddress
     // See comment in header.
 {
-    return [[[SimplePing alloc] initWithHostName:NULL address:hostAddress] autorelease];
+    return [[SimplePing alloc] initWithHostName:NULL address:hostAddress];
 }
 
 @synthesize hostName           = _hostName;
@@ -171,7 +171,7 @@ static uint16_t in_cksum(const void *buffer, size_t bufferLen)
     // that happens currently, but I've got into the habit of doing this as a 
     // defensive measure.
     
-    [[self retain] autorelease];
+    //[[self retain] autorelease];
     
     [self stop];
     if ( (self.delegate != nil) && [self.delegate respondsToSelector:@selector(simplePing:didFailWithError:)] ) {
@@ -419,7 +419,7 @@ static void SocketReadCallback(CFSocketRef s, CFSocketCallBackType type, CFDataR
 {
     SimplePing *    obj;
     
-    obj = (SimplePing *) info;
+    obj = (__bridge SimplePing *) info;
     assert([obj isKindOfClass:[SimplePing class]]);
     
     #pragma unused(s)
@@ -467,7 +467,7 @@ static void SocketReadCallback(CFSocketRef s, CFSocketCallBackType type, CFDataR
     if (err != 0) {
         [self _didFailWithError:[NSError errorWithDomain:NSPOSIXErrorDomain code:err userInfo:nil]];
     } else {
-        CFSocketContext     context = {0, self, NULL, NULL, NULL};
+        CFSocketContext     context = {0, (__bridge void *)(self), NULL, NULL, NULL};
         CFRunLoopSourceRef  rls;
         
         // Wrap it in a CFSocket and schedule it on the runloop.
@@ -504,7 +504,7 @@ static void SocketReadCallback(CFSocketRef s, CFSocketCallBackType type, CFDataR
     
     // Find the first IPv4 address.
     
-    addresses = (NSArray *) CFHostGetAddressing(self->_host, &resolved);
+    addresses = (__bridge NSArray *) CFHostGetAddressing(self->_host, &resolved);
     if ( resolved && (addresses != nil) ) {
         resolved = false;
         for (NSData * address in addresses) {
@@ -538,7 +538,7 @@ static void HostResolveCallback(CFHostRef theHost, CFHostInfoType typeInfo, cons
 {
     SimplePing *    obj;
     
-    obj = (SimplePing *) info;
+    obj = (__bridge SimplePing *) info;
     assert([obj isKindOfClass:[SimplePing class]]);
     
     #pragma unused(theHost)
@@ -563,12 +563,12 @@ static void HostResolveCallback(CFHostRef theHost, CFHostInfoType typeInfo, cons
         [self _startWithHostAddress];
     } else {
         Boolean             success;
-        CFHostClientContext context = {0, self, NULL, NULL, NULL};
+        CFHostClientContext context = {0, (__bridge void * _Nullable)(self), NULL, NULL, NULL};
         CFStreamError       streamError;
 
         assert(self->_host == NULL);
 
-        self->_host = CFHostCreateWithName(NULL, (CFStringRef) self.hostName);
+        self->_host = CFHostCreateWithName(NULL, (__bridge CFStringRef) self.hostName);
         assert(self->_host != NULL);
         
         CFHostSetClient(self->_host, HostResolveCallback, &context);

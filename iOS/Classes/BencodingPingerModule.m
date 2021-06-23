@@ -50,7 +50,7 @@
 {
     //[self clean];
 	// release any resources that have been retained by the module
-	[super dealloc];
+	//[super dealloc];
 }
 
 #pragma mark Internal Memory Management
@@ -67,7 +67,7 @@
 {
     if(_methodCallback!=nil)
     {
-        [_methodCallback release];
+        //[_methodCallback release];
     }
 }
 
@@ -86,7 +86,7 @@
     }
     
     //Fetch the callback function, remember to add retain since we are using deligates
-    _methodCallback = [[args objectForKey:@"completed"] retain];
+    _methodCallback = [args objectForKey:@"completed"];
     
     //Check that an address is provided
     if(![args objectForKey:@"address"]){
